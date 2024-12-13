@@ -1,0 +1,38 @@
+/* Police : Poppins */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Styles globaux */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f6f6f6; /* Couleur d'arrière-plan f6f6f6 */
+    font-family: 'Poppins', sans-serif; /* Police d'écriture */
+    color: #333; /* Couleur de texte par défaut */
+}
+
+/* Titres */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', sans-serif;
+    color: #222; 
+    margin: 0;
+}
+
+/* Paragraphes */
+p {
+    margin: 0 0 1rem;
+    line-height: 1.6;
+}
+
+/* Listes */
+ul, ol {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+/* Conteneur global centrer */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+}
