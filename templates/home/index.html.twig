@@ -2,19 +2,50 @@
 
 {% block title %}Hello HomeController!{% endblock %}
 
+{% block stylesheets %}
+    <!-- Lier le fichier CSS compilé -->
+    <link rel="stylesheet" href="{{ asset('build/home.css') }}">
+{% endblock %}
+
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>/var/www/html/symfonyCine/cine-app/src/Controller/HomeController.php</code></li>
-        <li>Your template at <code>/var/www/html/symfonyCine/cine-app/templates/home/index.html.twig</code></li>
-    </ul>
+<!-- Body -->
+ 
+<div class="container mt-4">
+    <h1 class="text-center mb-4">Films Tendances</h1>
+
+    <!-- Carrousel des films -->
+    <div id="movieCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            {% for i in 0..(movies|length // 5) %}
+                <div class="carousel-item {% if loop.first %}active{% endif %}">
+                    <div class="row">
+                        {% for j in 0..4 %}
+                            {% if (i * 5 + j) < movies|length %}
+                                <div class="col-2">
+                                    <a href="#">
+                                        <img src="{{ movies[(i * 5 + j)].poster_path }}" class="d-block w-100" alt="Film {{ movies[(i * 5 + j)].id }}">
+                                    </a>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Contrôles -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#movieCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#movieCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
 </div>
+
+
 {% endblock %}
