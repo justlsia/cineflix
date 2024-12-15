@@ -4,103 +4,67 @@
 
 {% block stylesheets %}
 <style>
-/* Styles personnalisés pour la fiche détaillée du film */
-body {
-    background-color: #f8f9fa;
+/* Style personnalisé pour le film */
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
 }
 
-.container {
-    margin-top: 30px;
+h4 {
+    font-size: 1.2rem;
+    color: #6c757d;
 }
 
-.card {
+p {
+    font-size: 1.1rem;
+    margin: 10px 0;
+}
+
+.actor-card, .similar-movie-card {
     margin-bottom: 20px;
 }
 
 .card-img-top {
-    height: 450px;
+    max-height: 300px;
     object-fit: cover;
-    border-radius: 8px;
 }
 
+/* Styles pour le carrousel horizontal */
+.row {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+}
+
+.card {
+    width: 100%;
+    max-width: 180px;
+    margin-right: 10px;
+}
+
+/* Ajout d'une bordure et un espacement entre les cartes */
 .card-body {
-    background-color: #1e1e1e;
-    color: white;
-    border-radius: 8px;
-    padding: 20px;
+    padding: 10px;
 }
 
 .card-title {
-    font-size: 1.25rem;
-    font-weight: bold;
-}
-
-.card-text {
     font-size: 1rem;
-    color: #ccc;
-}
-
-h1, h3 {
-    color: #333;
-}
-
-h4 {
-    color: #555;
-}
-
-/* Section des acteurs */
-.card-actor {
-    margin-top: 10px;
-    background-color: #2c2f33;
-    color: #fff;
-    border-radius: 10px;
-    padding: 10px;
     text-align: center;
 }
 
-.card-actor img {
-    border-radius: 50%;
-    width: 120px;
-    height: 120px;
-    object-fit: cover;
+.card-text {
+    font-size: 0.9rem;
+    text-align: center;
 }
 
-/* Boutons personnalisés */
-.btn-primary {
-    background-color: #007bff;
-    border: none;
+/* Adaptations pour les petits écrans */
+@media (max-width: 768px) {
+    .actor-card, .similar-movie-card {
+        flex: 1 0 40%;
+        margin-bottom: 15px;
+    }
 }
 
-.btn-primary:hover {
-    background-color: #0056b3;
-}
-
-.btn-secondary {
-    background-color: #6c757d;
-    border: none;
-}
-
-.btn-secondary:hover {
-    background-color: #495057;
-}
-
-/* Film recommendations section */
-.recommendations-title {
-    font-size: 1.5rem;
-    color: #007bff;
-    margin-top: 30px;
-}
-
-.recommendations .card {
-    background-color: #333;
-    color: #fff;
-}
-
-.recommendations .card-img-top {
-    height: 250px;
-    object-fit: cover;
-    border-radius: 8px;
-}
 
 </style>
 {% endblock %}
@@ -112,9 +76,12 @@ h4 {
 
 <div class="container mt-5">
     <div class="row">
+        <!-- Image du film -->
         <div class="col-md-4">
             <img src="https://image.tmdb.org/t/p/w500/{{ movie.poster_path }}" alt="{{ movie.title }}" class="img-fluid rounded">
         </div>
+
+        <!-- Détails du film -->
         <div class="col-md-8">
             <h1>{{ movie.title }}</h1>
             <h4>{{ movie.release_date|date("d M Y") }}</h4>
@@ -122,38 +89,40 @@ h4 {
             <p><strong>Synopsis:</strong> {{ movie.overview }}</p>
             <p><strong>Note:</strong> {{ movie.vote_average }} / 10</p>
             <p><strong>Durée:</strong> {{ movie.runtime }} minutes</p>
-
-            <h3>Cast</h3>
-            <div class="row">
-                {% for actor in credits.cast|slice(0, 5) %}
-                    <div class="col-md-4">
-                        <div class="card">
-                            <img src="https://image.tmdb.org/t/p/w500/{{ actor.profile_path }}" class="card-img-top" alt="{{ actor.name }}">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ actor.name }}</h5>
-                                <p class="card-text">{{ actor.character }}</p>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
         </div>
     </div>
-</div>
 
-<h3>Films similaires</h3>
-<div class="row">
-    {% for similarMovie in similarMovies|slice(0, 5) %}
-        <div class="col-md-4">
-            <div class="card">
-                <img src="https://image.tmdb.org/t/p/w500/{{ similarMovie.poster_path }}" class="card-img-top" alt="{{ similarMovie.title }}">
-                <div class="card-body">
-                    <h5 class="card-title">{{ similarMovie.title }}</h5>
-                    <a href="{{ path('movie_detail', {'id': similarMovie.id}) }}" class="btn btn-primary">Voir détails</a>
+    <!-- Section des acteurs -->
+    <h3 class="mt-5">Cast</h3>
+    <div class="row">
+        {% for actor in credits.cast|slice(0, 5) %}
+            <div class="col-md-2 actor-card">
+                <div class="card">
+                    <img src="https://image.tmdb.org/t/p/w500/{{ actor.profile_path }}" class="card-img-top" alt="{{ actor.name }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ actor.name }}</h5>
+                        <p class="card-text">{{ actor.character }}</p>
+                    </div>
                 </div>
             </div>
-        </div>
-    {% endfor %}
+        {% endfor %}
+    </div>
+
+    <!-- Section des films similaires -->
+    <h3 class="mt-5">Films similaires</h3>
+    <div class="row">
+        {% for similarMovie in similarMovies|slice(0, 5) %}
+            <div class="col-md-2 similar-movie-card">
+                <div class="card">
+                    <img src="https://image.tmdb.org/t/p/w500/{{ similarMovie.poster_path }}" class="card-img-top" alt="{{ similarMovie.title }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ similarMovie.title }}</h5>
+                        <a href="{{ path('movie_detail', {'id': similarMovie.id}) }}" class="btn btn-primary">Voir détails</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 </div>
 
 
@@ -167,32 +136,12 @@ h4 {
 
 {% block javascripts %}
 <script>
-// Fonction d'animation pour les acteurs et les recommandations
-document.addEventListener("DOMContentLoaded", function () {
-    // Animation de survol pour les cartes d'acteurs
-    const actorCards = document.querySelectorAll(".card-actor");
-    actorCards.forEach(card => {
-        card.addEventListener("mouseenter", () => {
-            card.style.transform = "scale(1.05)";
-            card.style.transition = "transform 0.3s ease-in-out";
-        });
-        card.addEventListener("mouseleave", () => {
-            card.style.transform = "scale(1)";
-        });
-    });
-
-    // Animation pour les recommandations de films
-    const recommendationCards = document.querySelectorAll(".recommendations .card");
-    recommendationCards.forEach(card => {
-        card.addEventListener("mouseenter", () => {
-            card.style.transform = "scale(1.05)";
-            card.style.transition = "transform 0.3s ease-in-out";
-        });
-        card.addEventListener("mouseleave", () => {
-            card.style.transform = "scale(1)";
-        });
-    });
+// Exemple de code JavaScript, vous pouvez ajouter des fonctions pour interagir avec les éléments
+document.addEventListener("DOMContentLoaded", function() {
+    console.log("Page chargée avec succès !");
+    // Ajouter ici d'autres interactions si nécessaire
 });
+
 
 </script>
 {% endblock %}
