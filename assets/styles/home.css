@@ -2,17 +2,33 @@
 #movieCarousel {
     margin-top: 30px;
     margin-bottom: 30px;
-    border-radius: 10px; /* Coins arrondis pour un effet plus doux */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre légère autour du carrousel */
+    border-radius: 5px; /* Coins arrondis */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre légère */
+    overflow: visible; /* Éviter les problèmes de contenu masqué */
+    background-color: blue; /* Couleur de fond du carrousel */
 }
 
+/* Images du carrousel */
 .carousel-item img {
-    max-height: 150px; /* Limite la hauteur des images */
-    object-fit: cover; /* S'assure que les images couvrent l'espace sans être déformées */
-    margin-bottom: 10px;
+    max-height: 500px; /* Taille plus réaliste */
+    object-fit: cover; /* S'assurer que les images couvrent l'espace sans distorsion */
+    background-color: red; /* Si une image ne charge pas, un fond rouge apparaît */
 }
 
-/* Contrôles du carrousel (flèches gauche et droite) */
+/* Disposition des colonnes dans le carrousel */
+.carousel-inner .row {
+    display: flex;
+    justify-content: space-between; /* Espacement égal entre les colonnes */
+    gap: 10px; /* Ajout d'espacement */
+    background-color: yellow; /* Fond jaune pour la ligne de films */
+}
+
+.carousel-inner .col-2 {
+    flex: 0 0 18%; /* Ajuste légèrement la largeur pour un meilleur espacement */
+    max-width: 18%;
+}
+
+/* Contrôles du carrousel */
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
     background-color: #000; /* Couleur noire pour les flèches */
@@ -20,47 +36,17 @@
     padding: 10px;
 }
 
-/* Styles spécifiques pour les contrôles du carrousel */
+/* Contrôles - alignement et largeur */
 .carousel-control-prev, 
 .carousel-control-next {
-    width: 5%; /* Largeur des flèches */
-    z-index: 10; /* Pour s'assurer qu'elles sont bien au-dessus des images */
+    width: 5%;
+    z-index: 10; /* Assurer la superposition */
 }
 
-/* Effet au survol des flèches */
-.carousel-control-prev:hover,
-.carousel-control-next:hover {
-    background-color: rgba(0, 0, 0, 0.5); /* Légère ombre au survol */
-}
-
-/* Titre principal de la page */
+/* Titre principal */
 h1 {
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
     text-align: center;
-    color: #333;
-}
-
-/* Affichage des films - espacement entre les items du carrousel */
-.carousel-item {
-    display: flex;
-    justify-content: center;
-}
-
-/* Utilisation du flexbox pour centrer les images dans chaque item */
-.carousel-item a {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-}
-
-/* Ajuster les images à la même hauteur */
-.carousel-inner .row {
-    display: flex;
-    justify-content: space-around;
-}
-
-.carousel-inner .col-2 {
-    padding: 0;
+    color: #ff1919;
 }

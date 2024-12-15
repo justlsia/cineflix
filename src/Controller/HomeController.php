@@ -55,6 +55,8 @@ class HomeController extends AbstractController
                 'poster_path' => $movie['poster_path'] 
                     ? "https://image.tmdb.org/t/p/w500{$movie['poster_path']}" 
                     : null, 
+                'title' => $movie['title'] ?? null,
+                'popularity' => $movie['popularity'] ?? null,
             ];
         },$data['results']);
     }
