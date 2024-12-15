@@ -6,36 +6,36 @@
 
 <style>
 :root {
-  --canvas: 220; /* Définir la teinte de base pour la palette de couleurs */
+  --canvas: 220; /* Teinte de base pour la palette de couleurs */
   --bg: hsl(var(--canvas), 15%, 22%); /* Couleur de fond basée sur la teinte de --canvas */
   --fg: hsl(var(--canvas), 39%, 95%); /* Couleur de texte basée sur la teinte de --canvas */
   --link: hsl(var(--canvas), 90%, 80%); /* Couleur des liens */
   --wgt: 200; /* Largeur des éléments du carrousel */
-  --height: 400px; /* Hauteur fixe des éléments */
-  --width: 300px; /* Largeur des éléments */
+  --height: 400px; /* Hauteur */
+  --width: 300px; /* Largeur */
 }
 
 body, html {
-  /* Ajoutez ici des styles globaux pour la page si nécessaire */
+  
 }
 
 a {
-  color: var(--link); /* Appliquer la couleur des liens */
+  color: var(--link); /* Couleur des liens */
   text-decoration: none; /* Supprimer la décoration de texte par défaut */
   font-weight: 450; /* Poids de la police des liens */
   transition: all 0.3s ease; /* Transition fluide pour tous les changements */
 }
 
 a:hover, a:focus, a:active {
-  color: #e8eff4; /* Couleur des liens lorsqu'ils sont survolés, en focus ou actifs */
+  color: #e8eff4; /* Couleur des liens au survol, focus, active */
 }
 
 button {
-  background: hsl(var(--canvas), 10%, 10%); /* Couleur d'arrière-plan du bouton */
+  background: hsl(var(--canvas), 10%, 10%); /* Couleur d'arrière-plan */
   color: inherit; /* Couleur du texte héritée */
-  border: none; /* Aucune bordure pour les boutons */
-  border-radius: 0.5em; /* Arrondir les bords des boutons */
-  padding: 0.25em 0.5em; /* Espacement interne du bouton */
+  border: none; /* Aucune bordure  */
+  border-radius: 0.5em; /* Arrondir les bords */
+  padding: 0.25em 0.5em; /* Espacement interne */
   font-family: inherit; /* Hériter de la police du texte */
   font-size: inherit; /* Hériter de la taille de police */
 }
@@ -43,7 +43,7 @@ button {
 @keyframes iconsLoad {
   from {
     opacity: 0; /* Au début, l'élément est transparent */
-    transform: translateY(-20px); /* Positionner l'élément légèrement plus haut */
+    transform: translateY(-20px); /* Positionner l'élément plus haut */
   }
   to {
     opacity: 1; /* À la fin, l'élément est opaque */
@@ -52,7 +52,7 @@ button {
 }
 
 .carousel {
-  display: grid; /* Utiliser un modèle de grille pour le carrousel */
+  display: grid; /* Grille pour le carrousel */
   transform: translate3d(0, 0, 0.1px); /* Optimisation pour le rendu 3D */
 }
 
@@ -67,8 +67,8 @@ button {
 }
 
 .carousel__item {
-  display: grid; /* Disposer chaque élément du carrousel comme une grille */
-  position: relative; /* Pour positionner les éléments par rapport à leur conteneur */
+  display: grid; /* Disposer le carrousel comme une grille */
+  position: relative; /* Positionner les éléments par rapport à leur conteneur */
   align-content: start; /* Aligner le contenu au début */
   margin: 0 5px; /* Espacement entre les éléments */
   padding: 0; /* Pas de remplissage */

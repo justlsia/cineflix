@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Fiche détail{% endblock %}
+{% block title %}Fiche détaillée{% endblock %}
 
 {% block stylesheets %}
 <style>
@@ -24,9 +24,27 @@ p {
     margin-bottom: 20px;
 }
 
+/* Style de l'image du film */
+.movie-image-container img {
+    max-height: 300px;
+    object-fit: cover;
+    border: 5px solid #ccc;  /* Contour autour de l'image du film */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Box shadow autour de l'image */
+    border-radius: 8px;
+}
+
+/* Style des cartes d'acteurs et de films similaires */
+.card {
+    border: 2px solid #ddd;  /* Contour léger autour des cartes */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Box shadow léger pour les cartes */
+    border-radius: 8px;  /* Coins arrondis */
+    overflow: hidden;
+}
+
 .card-img-top {
     max-height: 300px;
     object-fit: cover;
+    border-bottom: 2px solid #ddd;  /* Ligne sous l'image */
 }
 
 /* Styles pour le carrousel horizontal */
@@ -36,13 +54,6 @@ p {
     overflow-x: auto;
 }
 
-.card {
-    width: 100%;
-    max-width: 180px;
-    margin-right: 10px;
-}
-
-/* Ajout d'une bordure et un espacement entre les cartes */
 .card-body {
     padding: 10px;
 }
@@ -66,6 +77,7 @@ p {
 }
 
 
+
 </style>
 {% endblock %}
 
@@ -83,17 +95,18 @@ p {
 
         <!-- Détails du film -->
         <div class="col-md-8">
-            <h1>{{ movie.title }}</h1>
-            <h4>{{ movie.release_date|date("d M Y") }}</h4>
+            <h1>Titre : {{ movie.title }}</h1>
+            <h4>Date de sortie : {{ movie.release_date|date("d F Y") }}</h4>
             <p><strong>Genre:</strong> {{ movie.genres | map(g => g.name) | join(', ') }}</p>
             <p><strong>Synopsis:</strong> {{ movie.overview }}</p>
             <p><strong>Note:</strong> {{ movie.vote_average }} / 10</p>
             <p><strong>Durée:</strong> {{ movie.runtime }} minutes</p>
         </div>
     </div>
+    
 
     <!-- Section des acteurs -->
-    <h3 class="mt-5">Cast</h3>
+    <h3 class="mt-5">Acteurs principaux</h3>
     <div class="row">
         {% for actor in credits.cast|slice(0, 5) %}
             <div class="col-md-2 actor-card">
@@ -123,6 +136,10 @@ p {
             </div>
         {% endfor %}
     </div>
+
+
+
+
 </div>
 
 
