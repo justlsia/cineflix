@@ -3,30 +3,21 @@
 {% block title %}Films Tendances{% endblock %}
 
 {% block stylesheets %}
-    <style>
+<style>
+
 :root {
   --canvas: 220;
   --bg: hsl(var(--canvas), 15%, 22%);
   --fg: hsl(var(--canvas), 39%, 95%);
   --link: hsl(var(--canvas), 90%, 80%);
   --wgt: 200;
-  --height: calc(80vh - 50px);
-  --width: 450px;
+  /*--height: calc(40vh - 50px);*/
+  --height: 400px;
+  --width: 300px; /* Taille réduite pour les images plus petites */
 }
 
 body, html {
-  font-family: heebo, sans-serif;
-  color: var(--fg);
-  background: linear-gradient(rgba(51, 51, 51, 0.678), rgba(24, 24, 24, 0.6)),
-    url("https://static.hitek.fr/img/actualite/ill_m/413718101/gottrone.jpg")
-      no-repeat center center;
-  background-size: cover;
-  background-attachment: fixed;
-  font-weight: var(--wgt);
-  padding: 0 0 50px;
-  display: grid;
-  place-items: center;
-  height: 100%;
+
 }
 
 a {
@@ -61,10 +52,6 @@ button {
   }
 }
 
-body {
-  overflow-y: hidden;
-}
-
 .carousel {
   display: grid;
   transform: translate3d(0, 0, 0.1px);
@@ -84,10 +71,11 @@ body {
   display: grid;
   position: relative;
   align-content: start;
-  margin: 0 10px;
+  margin: 0 5px; /* Réduit l'espace entre les éléments */
   padding: 0;
-  flex: 1 1 10%;
+  flex: 1 1 15%;
   height: var(--height);
+  width: var(--width); /* Applique la largeur ajustée */
   overflow: hidden;
   background: rgba(255, 255, 255, 0.2);
   border-radius: 16px;
@@ -103,7 +91,7 @@ body {
 }
 
 .carousel__image, .carousel__contents {
-  width: var(--width);
+  width: var(--width); /* Applique la largeur ajustée */
   height: auto;
 }
 
@@ -120,6 +108,9 @@ body {
 @media screen and (max-width: 800px) {
   .carousel__item {
     flex-basis: 15%;
+  }
+  .carousel__item img {
+    width: calc(var(--width) * 0.75); /* Réduit la taille des images */
   }
 }
 
@@ -163,12 +154,16 @@ body {
   .carousel__item:not(:nth-child(n + 4)) *, .carousel__item:nth-child(n + 7) * {
     opacity: 0 !important;
   }
+
+  .carousel__item img {
+    width: calc(var(--width) * 0.6); /* Réduit encore la taille des images */
+  }
 }
 
 .carousel__item img {
   display: block;
   position: absolute;
-  width: var(--width);
+  width: var(--width); /* Applique la largeur ajustée */
   height: 100%;
   left: 50%;
   top: 50%;
@@ -249,7 +244,7 @@ body {
 
 @media screen and (max-width: 800px) {
   .carousel__item img {
-    width: calc(var(--width) * 0.5);
+    width: calc(var(--width) * 0.5); /* Réduit encore la taille des images */
   }
   .carousel__contents {
     transform: translateX(-100%) rotate(90deg);
@@ -308,6 +303,21 @@ body, html {
   padding: 0;
   align-items: start;
 }
+
+
+/* TEMP */
+/* Cacher le reste des films, uniquement les 6 visibles */
+.carousel__list {
+    width: calc(6 * 100%); /* Afficher les 6 films dans la fenêtre */
+}
+
+
+.carousel__item {
+    flex-basis: var(--inactive-size, calc(var(--width) / 2)); /* Taille par défaut */
+
+}
+
+
 
     </style>
 {% endblock %}
@@ -454,5 +464,29 @@ document.addEventListener("DOMContentLoaded", function() {
       $list.addEventListener("click", handleSlideClick);
       $list.addEventListener("keyup", handleSlideKey);
     });
+
+
+
+    const updateSizes = () => {
+    const root = document.documentElement;
+    const activeSize = getComputedStyle(root).getPropertyValue('--active-size').trim();
+    const inactiveSize = getComputedStyle(root).getPropertyValue('--inactive-size').trim();
+    
+    // Échange les valeurs
+    root.style.setProperty('--active-size', inactiveSize);
+    root.style.setProperty('--inactive-size', activeSize);
+};
+
+const activateSlide = ($slide) => {
+    if (!$slide) return;
+    const $slides = document.querySelectorAll(".carousel__item");
+    $slides.forEach((el) => el.removeAttribute("data-active"));
+    $slide.setAttribute("data-active", true);
+    $slide.focus();
+    
+    // Met à jour les tailles après l'activation du nouveau slide
+    updateSizes();
+};
+
     </script>
 {% endblock %}
