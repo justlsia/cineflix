@@ -1,525 +1,458 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}Films Tendances{% endblock %}
 
 {% block stylesheets %}
-    <!-- Lier le fichier CSS compilé -->
-    
-
-    <!-- Inclure le CSS directement dans le fichier Twig -->
     <style>
-
 :root {
-    /* Définit les variables de couleur et de dimension */
-    --canvas: 220; /* Teinte de couleur pour la palette */
-    --bg: hsl(var(--canvas), 15%, 22%); /* Couleur de fond principale */
-    --fg: hsl(var(--canvas), 39%, 95%); /* Couleur du texte principal */
-    --link: hsl(var(--canvas), 90%, 80%); /* Couleur des liens */
-    --wgt: 200; /* Poids de la police */
-    /*--height: calc(80vh - 50px); /* Hauteur du carousel */
-    --height: calc(40vh - 5px); /* Hauteur du carousel */
-    --width: 450px; /* Largeur des éléments */
-}
-  
-body,
-html {
-    font-family: heebo, sans-serif; /* Police principale */
-    color: var(--fg); /* Couleur du texte */
-    background-size: cover; /* Fond d'écran en couverture */
-    background-attachment: fixed; /* Fond fixe lors du scroll */
-    font-weight: var(--wgt); /* Poids de la police */
-    padding: 0 0 50px; /* Marge du bas */
-    display: grid; /* Utilisation du modèle de grille */
-    place-items: center; /* Centrer le contenu */
-    height: 90%; /* Prend toute la hauteur de l'écran */
-}
-a {
-    color: var(--link); /* Couleur des liens */
-    text-decoration: none; /* Enlève la décoration de lien par défaut */
-    font-weight: 450; /* Poids de la police des liens */
-    transition: all 0.3s ease; /* Transition douce lors du survol */
+  --canvas: 220;
+  --bg: hsl(var(--canvas), 15%, 22%);
+  --fg: hsl(var(--canvas), 39%, 95%);
+  --link: hsl(var(--canvas), 90%, 80%);
+  --wgt: 200;
+  --height: calc(80vh - 50px);
+  --width: 450px;
 }
 
-a:hover,
-a:focus,
-a:active {
-    color: #e8eff4; /* Couleur du lien lors du survol ou du focus */
+body, html {
+  font-family: heebo, sans-serif;
+  color: var(--fg);
+  background: linear-gradient(rgba(51, 51, 51, 0.678), rgba(24, 24, 24, 0.6)),
+    url("https://static.hitek.fr/img/actualite/ill_m/413718101/gottrone.jpg")
+      no-repeat center center;
+  background-size: cover;
+  background-attachment: fixed;
+  font-weight: var(--wgt);
+  padding: 0 0 50px;
+  display: grid;
+  place-items: center;
+  height: 100%;
+}
+
+a {
+  color: var(--link);
+  text-decoration: none;
+  font-weight: 450;
+  transition: all 0.3s ease;
+}
+
+a:hover, a:focus, a:active {
+  color: #e8eff4;
 }
 
 button {
-    background: hsl(var(--canvas), 10%, 10%); /* Couleur de fond des boutons */
-    color: inherit; /* La couleur du texte est héritée */
-    border: none; /* Pas de bordure */
-    border-radius: 0.5em; /* Coins arrondis */
-    padding: 0.25em 0.5em; /* Espacement interne */
-    font-family: inherit; /* Hérite de la police par défaut */
-    font-size: inherit; /* Taille de la police héritée */
+  background: hsl(var(--canvas), 10%, 10%);
+  color: inherit;
+  border: none;
+  border-radius: 0.5em;
+  padding: 0.25em 0.5em;
+  font-family: inherit;
+  font-size: inherit;
 }
- /* Animation de chargement des icônes */
+
 @keyframes iconsLoad {
-    from {
-        opacity: 0;
-        transform: translateY(-20px); /* Début de l'animation, décalé vers le haut */
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0px); /* Fin de l'animation, position normale */
-    }
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0px);
+  }
 }
 
 body {
-    overflow-y: hidden; /* Désactive le défilement vertical */
+  overflow-y: hidden;
 }
 
 .carousel {
-    display: grid;
-    transform: translate3d(0, 0, 0.1px); /* Transformation pour une meilleure performance */
+  display: grid;
+  transform: translate3d(0, 0, 0.1px);
 }
 
 .carousel__list {
-    display: flex; /* Disposition des éléments du carousel en ligne */
-    overflow: hidden; /* Masque les éléments qui débordent */
-    list-style: none; /* Enlève les puces */
-    padding: 2em 0 3em; /* Espacement autour des éléments */
-    margin: 0; /* Retire la marge par défaut */
-    contain: layout; /* Optimise le rendu */
-    isolation: isolate; /* Isoler les éléments du carousel */
-
-
-    /* TEMP */
-    transition: transform 0.5s ease-in-out; /* Animation de glissement */
+  display: flex;
+  overflow: hidden;
+  list-style: none;
+  padding: 2em 0 3em;
+  margin: 0;
+  contain: layout;
+  isolation: isolate;
 }
 
 .carousel__item {
-    display: grid;
-    position: relative;
-    align-content: start; /* Aligne le contenu en haut */
-    margin: 0 10px; /* Marge entre les éléments */
-    padding: 0; /* Pas de padding */
-    flex: 1 1 10%; /* Taille flexible des éléments */
-    height: var(--height); /* Hauteur définie dans :root */
-    overflow: hidden; /* Cache les éléments qui dépassent */
-    background: rgba(255, 255, 255, 0.2); /* Fond légèrement transparent */
-    border-radius: 16px; /* Coins arrondis */
-    transform: translate3d(0, 0, 0.1px); /* Transformation pour la performance */
-    box-shadow: rgba(0, 0, 0, 0.4) 0px 3px 15px 2px, /* Ombre portée */
-        rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, /* Ombre secondaire */
-        rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, /* Ombre légère */
-        rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset; /* Ombre interne */
-    contain: layout;
-    isolation: isolate;
-
-    /* temp */
-    flex-shrink: 0; /* Évite que les items se réduisent */
-    transition: opacity 0.6s ease; /* Animation d'apparition */
+  display: grid;
+  position: relative;
+  align-content: start;
+  margin: 0 10px;
+  padding: 0;
+  flex: 1 1 10%;
+  height: var(--height);
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  transform: translate3d(0, 0, 0.1px);
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 3px 15px 2px, rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;
+  contain: layout;
+  isolation: isolate;
 }
 
-/* Transition de tous les éléments pour une animation fluide */
-.carousel__item,
-.carousel__item * {
-    transition: all 0.6s cubic-bezier(0.55, 0.24, 0.18, 1); /* Transition fluide */
-    user-select: none; /* Désactive la sélection de texte */
+.carousel__item, .carousel__item * {
+  transition: all 0.6s cubic-bezier(0.55, 0.24, 0.18, 1);
+  user-select: none;
 }
 
-.carousel__image,
-.carousel__contents {
-    width: var(--width); /* Largeur des images et contenu */
-    height: auto; /* Hauteur automatique */
+.carousel__image, .carousel__contents {
+  width: var(--width);
+  height: auto;
 }
 
-/* Interaction au survol des éléments du carousel */
 .carousel__item:hover {
-    flex-basis: calc(var(--width) / 2); /* Augmente la taille de l'élément au survol */
-    transition: all 0.3s ease; /* Transition fluide */
+  flex-basis: calc(var(--width) / 2);
+  transition: all 0.3s ease;
 }
 
-/* Quand l'élément est actif, il occupe toute la largeur */
 .carousel__item[data-active] {
-    flex-basis: var(--width); 
-    flex-grow: 0; /* Ne grandit pas davantage */
+  flex-basis: var(--width);
+  flex-grow: 0;
 }
 
-/* Règles de responsive design pour les petites tailles d'écran */
 @media screen and (max-width: 800px) {
-    .carousel__item {
-        flex-basis: 15%; /* Taille des éléments réduite */
-    }
+  .carousel__item {
+    flex-basis: 15%;
+  }
 }
 
-/* Pour les écrans encore plus petits */
 @media screen and (max-width: 600px) {
-    .carousel__item {
-        flex-basis: 10%; /* Taille encore plus petite des éléments */
-        margin: 0 5px; /* Marge réduite */
-        border-radius: 8px; /* Coins arrondis plus petits */
-        font-size: 3vw; /* Taille de police relative à la largeur de l'écran */
-    }
+  .carousel__item {
+    flex-basis: 10%;
+    margin: 0 5px;
+    border-radius: 8px;
+    font-size: 3vw;
+  }
 
-    /* Effet d'animation sur les éléments actifs */
-    .carousel__item[data-active] {
-        flex-basis: 45%; /* Agrandit l'élément actif */
-        flex-grow: 0;
-    }
+  .carousel__item[data-active] {
+    flex-basis: 45%;
+    flex-grow: 0;
+  }
 
-    /* Masque certains éléments du carousel */
-    .carousel__item:nth-child(3),
-    .carousel__item:nth-child(7) {
-        flex: 0 0 10px;
-    }
+  .carousel__item:nth-child(3), .carousel__item:nth-child(7) {
+    flex: 0 0 10px;
+  }
 
-    /* Animation de translation pour les éléments spécifiques */
-    .carousel__item:nth-child(2),
-    .carousel__item:nth-child(8) {
-        flex: 0 0 5px;
-        transform: translateX(-50px);
-    }
+  .carousel__item:nth-child(2), .carousel__item:nth-child(8) {
+    flex: 0 0 5px;
+    transform: translateX(-50px);
+  }
 
-    .carousel__item:nth-child(8) {
-        transform: translateX(50px);
-    }
+  .carousel__item:nth-child(8) {
+    transform: translateX(50px);
+  }
 
-    /* Effet de masquage pour certains éléments */
-    .carousel__item:nth-child(1),
-    .carousel__item:nth-child(n + 9) {
-        flex: 0 0 0px;
-        margin: 0;
-        box-shadow: none;
-        opacity: 0 !important;
-    }
+  .carousel__item:nth-child(1), .carousel__item:nth-child(n + 9) {
+    flex: 0 0 0px;
+    margin: 0;
+    box-shadow: none;
+    opacity: 0 !important;
+  }
 
-    .carousel__item:not(:nth-child(n + 5)) img,
-    .carousel__item:nth-child(n + 7) img {
-        opacity: 0.8; /* Rendre les images moins visibles */
-    }
+  .carousel__item:not(:nth-child(n + 5)) img, .carousel__item:nth-child(n + 7) img {
+    opacity: 0.8;
+  }
 
-    .carousel__item:not(:nth-child(n + 4)) *,
-    .carousel__item:nth-child(n + 7) * {
-        opacity: 0 !important; /* Masquer le contenu de certains éléments */
-    }
+  .carousel__item:not(:nth-child(n + 4)) *, .carousel__item:nth-child(n + 7) * {
+    opacity: 0 !important;
+  }
 }
 
-/* Autres règles de responsive pour les écrans plus larges */
-@media screen and (min-width: 600px) {
-    .carousel__item:nth-child(3),
-    .carousel__item:nth-child(10) {
-        flex: 0 0 10px;
-    }
-
-    .carousel__item:nth-child(2),
-    .carousel__item:nth-child(11) {
-        flex: 0 0 5px;
-        transform: translateX(-50px);
-    }
-
-    .carousel__item:nth-child(11) {
-        transform: translateX(50px);
-    }
-
-    /* Masquer certains éléments */
-    .carousel__item:nth-child(1),
-    .carousel__item:nth-child(n + 12) {
-        flex: 0 0 0px;
-        margin: 0;
-        box-shadow: none;
-        opacity: 0 !important;
-    }
-
-    /* Effet de transparence sur les images */
-    .carousel__item:not(:nth-child(n + 5)) img,
-    .carousel__item:nth-child(n + 9) img {
-        opacity: 0.8;
-    }
-
-    .carousel__item:not(:nth-child(n + 4)) *,
-    .carousel__item:nth-child(n + 10) * {
-        opacity: 0 !important;
-    }
-}
-
-/* Style des images des items */
 .carousel__item img {
-    display: block;
-    position: absolute;
-    width: var(--width); /* Largeur */
-    height: 100%;           /* Largeur */
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    z-index: -1;
-    aspect-ratio: 2/3;
-    object-fit: cover; /* Adapte l'image à la taille */
-    filter: saturate(0.2) contrast(0.75) brightness(1.1); /* Applique un filtre à l'image */
+  display: block;
+  position: absolute;
+  width: var(--width);
+  height: 100%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+  aspect-ratio: 2/3;
+  object-fit: cover;
+  filter: saturate(0.2) contrast(0.75) brightness(1.1);
 }
 
-/* Gradient sur les éléments */
 .carousel__item::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    opacity: 1;
-    background: linear-gradient(
-        160deg,
-        rgba(0, 0, 0, 0) 40%,
-        rgba(50, 50, 50, 0.7) 70%,
-        rgba(30, 30, 30, 0.9) 100%
-    ); /* Ajout d'un gradient sombre */
-    transition: all 0.66s cubic-bezier(0.55, 0.24, 0.18, 1); /* Animation du gradient */
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  opacity: 1;
+  background: linear-gradient(160deg, rgba(0, 0, 0, 0) 40%, rgba(50, 50, 50, 0.7) 70%, rgba(30, 30, 30, 0.9) 100%);
+  transition: all 0.66s cubic-bezier(0.55, 0.24, 0.18, 1);
 }
 
-/* Effet sur l'élément actif */
 .carousel__item[data-active]::after {
-    transform: translateY(100%);
+  transform: translateY(100%);
 }
 
-.carousel__item[data-active],
-.carousel__item[data-active] * {
-    opacity: 1;
-    filter: none;
+.carousel__item[data-active], .carousel__item[data-active] * {
+  opacity: 1;
+  filter: none;
 }
 
 .carousel__contents {
-    display: flex;
-    flex-direction: column-reverse;
-    justify-content: start;
-    min-height: 200px;
-    padding: 1em;
-    z-index: 2;
-    background-image: radial-gradient(
-        ellipse at 0px 0px,
-        rgba(0, 0, 0, 0.4) 20%,
-        transparent 50%
-    ); /* Dégradé en arrière-plan */
-    background-size: 170% 200px;
-    background-repeat: no-repeat;
-    position: absolute;
-    top: 0;
-    left: 0;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: start;
+  min-height: 200px;
+  padding: 1em;
+  z-index: 2;
+  background-image: radial-gradient(ellipse at 0px 0px, rgba(0, 0, 0, 0.4) 20%, transparent 50%);
+  background-size: 170% 200px;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .carousel__contents .user__name {
-    color: #e8eff4;
-    font-size: 1.75em;
-    font-weight: 600;
-    letter-spacing: 0.8px;
-    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
+  color: #e8eff4;
+  font-size: 1.75em;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
 }
 
 .carousel__contents .user__title {
-    font-family: lexend;
-    font-size: 0.875em;
-    letter-spacing: 1.25px;
-    font-weight: 500;
-    text-transform: uppercase;
-    color: transparent;
-    background: linear-gradient(270deg, rgb(255, 251, 0), rgb(255, 187, 0)); /* Gradient sur le texte */
-    background-clip: text;
-    -webkit-background-clip: text;
-    opacity: 0.85;
-    text-wrap: balance;
-    margin-bottom: 0.5em;
+  font-family: lexend;
+  font-size: 0.875em;
+  letter-spacing: 1.25px;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: transparent;
+  background: linear-gradient(270deg, rgb(255, 251, 0), rgb(255, 187, 0));
+  background-clip: text;
+  -webkit-background-clip: text;
+  opacity: 0.85;
+  text-wrap: balance;
+  margin-bottom: 0.5em;
 }
 
-.carousel__contents .user__title,
-.carousel__contents .user__name {
-    margin: 0;
-    line-height: 1.1;
-    opacity: 0;
-    transform: translateX(-200px);
-    transition-duration: 1s;
-    max-width: 18em;
+.carousel__contents .user__title, .carousel__contents .user__name {
+  margin: 0;
+  line-height: 1.1;
+  opacity: 0;
+  transform: translateX(-200px);
+  transition-duration: 1s;
+  max-width: 18em;
 }
 
 @media screen and (max-width: 800px) {
-    .carousel__item img {
-        width: calc(var(--width) * 0.5); /* Ajuste la taille des images */
-    }
-
-    .carousel__contents {
-        transform: translateX(-100%) rotate(90deg); /* Rotation du contenu */
-        transform-origin: bottom right;
-        align-items: end;
-        justify-content: end;
-        background-image: radial-gradient(
-            ellipse at 100% 100%,
-            rgba(0, 0, 0, 0.4) 0%,
-            transparent 50%
-        );
-        background-position: -100% 100%;
-        flex-direction: column;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        text-align: right;
-    }
-}
-
-[data-active] .carousel__contents {
+  .carousel__item img {
+    width: calc(var(--width) * 0.5);
+  }
+  .carousel__contents {
+    transform: translateX(-100%) rotate(90deg);
+    transform-origin: bottom right;
+    align-items: end;
+    justify-content: end;
+    background-image: radial-gradient(ellipse at 100% 100%, rgba(0, 0, 0, 0.4) 0%, transparent 50%);
+    background-position: -100% 100%;
+    flex-direction: column;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    text-align: right;
+  }
+  [data-active] .carousel__contents {
     background-position: 100% 100%;
-}
-
-.carousel__contents .user__title,
-.carousel__contents .user__name {
+  }
+  .carousel__contents .user__title,
+  .carousel__contents .user__name {
     max-width: 70vh;
     transform: translateX(200px);
+  }
 }
 
 [data-active] .carousel__contents * {
-    transform: translateX(0px);
-    transition-duration: 0.66s;
-    opacity: 1;
+  transform: translateX(0px);
+  transition-duration: 0.66s;
+  opacity: 1;
 }
 
 [data-active] .carousel__contents .user__name {
-    transition-delay: 0.1s;
+  transition-delay: 0.1s;
 }
 
 [data-active] .carousel__contents .user__title {
-    opacity: 0.85;
-    transition-delay: 0.05s;
+  opacity: 0.85;
+  transition-delay: 0.05s;
 }
 
-/* Navigation du carousel */
 .carousel__nav {
-    padding: 1em;
-    justify-self: end;
-    grid-row: 1;
-    display: flex;
-    justify-content: space-between;
-    gap: 1em;
+  padding: 1em;
+  justify-self: end;
+  grid-row: 1;
+  display: flex;
+  justify-content: space-between;
+  gap: 1em;
 }
 
 button {
-    display: flex;
-    gap: 0.5em;
-    padding: 0.5em 1.5em;
+  display: flex;
+  gap: 0.5em;
+  padding: 0.5em 1.5em;
 }
 
-/* Ajuste les marges et l'alignement du body */
-body,
-html {
-    padding: 0;
-    align-items: start;
+body, html {
+  padding: 0;
+  align-items: start;
 }
-
-
-/* TEMP */
-.carousel__item[data-active] {
-    flex-basis: var(--width); /* Réglez la taille de l'élément actif */
-    opacity: 1;
-    z-index: 2; /* Améliore la visibilité de l'élément actif */
-}
-
-.carousel__item {
-    opacity: 0.5; /* Réduit l'opacité des éléments non actifs */
-    transition: opacity 0.6s ease-in-out;
-}
-
-.carousel__item:hover {
-    flex-basis: calc(var(--width) + 20px); /* Agrandissement de l'élément au survol */
-    transition: all 0.3s ease;
-}
-
-.carousel__item[data-active] img {
-    opacity: 1; /* Rend l'image de l'élément actif pleinement visible */
-}
-
 
     </style>
 {% endblock %}
 
 {% block body %}
-
-
-<!-- Body -->
- 
-<!-- Carrousel des films tendances -->
-<main id="app">
-    <section class="carousel">
-        <ul class="carousel__list">
-            <!-- Boucler sur les films -->
-            {% for movie in movies %}
-            <li class="carousel__item" tabindex="0" {% if loop.first %} data-active="true" {% endif %}>
-                <div class="carousel__box">
-                    <div class="carousel__image">
-                        <img src="{{movie.poster_path}}" />
-                    </div>
-                    <!-- Descriptifs principaux du film -->
-                    <div class="carousel__contents">
-                        <h2 class="user__name">{{movie.title}}</h2>
-                        <h3 class="user__title">{{movie.popularity}}</h3>
-                    </div>
-                </div>
-            </li>
-            {% endfor %}
-        </ul>
-
-        <div class="carousel__nav">
-          <button class="prev"><i></i><span>précédent</span></button>
-          <button class="next"><span>suivant</span><i></i></button>
-        </div>
-
-
-    </section>
-</main>
+    <!-- Titre de la page -->
+    <h1>Films tendances</h1>
     
+    <!-- Contenu du carrousel -->
+    <main id="app">
+        <section class="carousel">
+            <ul class="carousel__list">
+                <!-- Boucle sur chaque film pour l'afficher -->
+                {% for movie in movies %}
+                    <li class="carousel__item" tabindex="0" {% if loop.first %} data-active="true" {% endif %}>
+                        <div class="carousel__box">
+                            <div class="carousel__image">
+                                <img src="{{ movie.poster_path }}" alt="{{ movie.title }}" />
+                            </div>
+                            <div class="carousel__contents">
+                                <h2 class="user__name">{{ movie.title }}</h2>
+                                <h3 class="user__title">Popularité : {{ movie.popularity }}</h3>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
 
-
+            <!-- Navigation pour faire défiler les films -->
+            <div class="carousel__nav">
+                <button class="prev">Précédent</button>
+                <button class="next">Suivant</button>
+            </div>
+        </section>
+    </main>
 {% endblock %}
 
-
 {% block javascripts %}
-<script>
+    <script>
 document.addEventListener("DOMContentLoaded", function() {
-    const prevButton = document.querySelector('.carousel__nav .prev');
-    const nextButton = document.querySelector('.carousel__nav .next');
-    const carouselItems = document.querySelectorAll('.carousel__item');
-    let activeIndex = Array.from(carouselItems).findIndex(item => item.hasAttribute('data-active'));
+      const d = document;
+      const $q = d.querySelectorAll.bind(d);
+      const $g = d.querySelector.bind(d);
+      const $prev = $g(".prev");
+      const $next = $g(".next");
+      const $list = $g(".carousel__list");
 
-    // Si aucun élément n'a l'attribut data-active, par défaut le premier est actif
-    if (activeIndex === -1) {
-        activeIndex = 0;
-    }
+      if (!$prev || !$next || !$list) {
+        console.error("Erreur : Les éléments nécessaires ne sont pas présents dans le DOM.");
+        return; // Stoppe le script si les éléments ne sont pas présents
+      }
 
-    // Fonction pour définir l'élément actif
-    function setActiveItem(index) {
-        // On retire "data-active" de tous les éléments
-        carouselItems.forEach(item => {
-            item.removeAttribute('data-active');
-        });
+      let auto;
+      let pauser;
 
-        // On ajoute "data-active" à l'élément spécifié
-        carouselItems[index].setAttribute('data-active', 'true');
-    }
+      const getActiveIndex = () => {
+        const $active = $g("[data-active]");
+        return getSlideIndex($active);
+      };
 
-    // Définir l'élément actif au début
-    setActiveItem(activeIndex);
+      const getSlideIndex = ($slide) => {
+        return [...$q(".carousel__item")].indexOf($slide);
+      };
 
-    // Gestion du clic sur le bouton "précédent"
-    prevButton.addEventListener('click', () => {
-        // Naviguer vers l'élément précédent
-        activeIndex = (activeIndex === 0) ? carouselItems.length - 1 : activeIndex - 1;
-        setActiveItem(activeIndex);
+      const prevSlide = () => {
+        const index = getActiveIndex();
+        const $slides = $q(".carousel__item");
+        const $last = $slides[$slides.length - 1];
+        $last.remove();
+        $list.prepend($last);
+        activateSlide($q(".carousel__item")[index]);
+      };
+
+      const nextSlide = () => {
+        const index = getActiveIndex();
+        const $slides = $q(".carousel__item");
+        const $first = $slides[0];
+        $first.remove();
+        $list.append($first);
+        activateSlide($q(".carousel__item")[index]);
+      };
+
+      const chooseSlide = (e) => {
+        const $slide = e.target.closest(".carousel__item");
+        if (!$slide) return;
+        const index = getSlideIndex($slide);
+        activateSlide($slide);
+      };
+
+      const activateSlide = ($slide) => {
+        if (!$slide) return;
+        const $slides = $q(".carousel__item");
+        $slides.forEach((el) => el.removeAttribute("data-active"));
+        $slide.setAttribute("data-active", true);
+        $slide.focus();
+      };
+
+      const autoSlide = () => {
+        nextSlide();
+      };
+
+      const pauseAuto = () => {
+        clearInterval(auto);
+        clearTimeout(pauser);
+      };
+
+      const handleNextClick = (e) => {
+        pauseAuto();
+        nextSlide(e);
+      };
+
+      const handlePrevClick = (e) => {
+        pauseAuto();
+        prevSlide(e);
+      };
+
+      const handleSlideClick = (e) => {
+        pauseAuto();
+        chooseSlide(e);
+      };
+
+      const handleSlideKey = (e) => {
+        switch (e.keyCode) {
+          case 37:
+          case 65:
+            handlePrevClick();
+            break;
+          case 39:
+          case 68:
+            handleNextClick();
+            break;
+        }
+      };
+
+      const startAuto = () => {
+        auto = setInterval(autoSlide, 3000);
+      };
+
+      startAuto();
+
+      // Assurez-vous que les éléments existent avant d'ajouter des écouteurs
+      $next.addEventListener("click", handleNextClick);
+      $prev.addEventListener("click", handlePrevClick);
+      $list.addEventListener("click", handleSlideClick);
+      $list.addEventListener("keyup", handleSlideKey);
     });
-
-    // Gestion du clic sur le bouton "suivant"
-    nextButton.addEventListener('click', () => {
-        // Naviguer vers l'élément suivant
-        activeIndex = (activeIndex === carouselItems.length - 1) ? 0 : activeIndex + 1;
-        setActiveItem(activeIndex);
-    });
-
-    // Gestion du clic sur un élément du carrousel pour le rendre actif
-    carouselItems.forEach((item, index) => {
-        item.addEventListener('click', () => {
-            setActiveItem(index);
-        });
-    });
-});
-
-
-
-</script>
+    </script>
 {% endblock %}
