@@ -82,29 +82,26 @@ class HomeController extends AbstractController
 
 
 
-    
 
 
 
 
+    #[Route('/movie/{id}', name: 'movie_detail')]
+    public function show(int $id, MovieRepository $movieRepository): Response
+    {
+        // Récupère le film selon l'ID
+        $movie = $movieRepository->find($id);
 
+        // Si le film n'existe pas
+        if (!$movie) {
+            throw $this->createNotFoundException('Film non trouvé.');
+        }
 
-
-
-
-
-
-
-    //#[Route('/home', name: 'app_home')]
-    ///public function index(): Response
-    //{
-    //    return $this->render('home/index.html.twig', [
-    //        'controller_name' => 'HomeController',
-    //    ]);
-    //}
-    
-
-
+        // Rendu de la vue des détails du film
+        return $this->render('movie/detail.html.twig', [
+            'movie' => $movie,
+        ]);
+    }
 
 
 

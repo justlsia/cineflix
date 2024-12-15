@@ -95,7 +95,7 @@ class MovieController extends AbstractController
         ]);
     }
 
-    // Méthode pour formater les données des films
+    // Formater les données des films
     private function formatMovies(array $movies): array
     {
         return array_map(function ($movie) {
@@ -109,4 +109,140 @@ class MovieController extends AbstractController
             ];
         }, $movies);
     }
+
+
+
+
+
+// Définition de la route qui capte un ID dans l'URL et associe cette route à la méthode 'show'
+#[Route('/movies/{id}', name: 'movie_detail')]
+public function show(int $id): Response
+{
+    // Appel de la fonction pour récupérer les données d'un film à partir de l'ID passé dans l'URL
+    $movie = $this->getMovieDataFromApi($id);
+
+    // Si le film n'est pas trouvé (ou s'il y a une erreur), on redirige l'utilisateur vers la page d'accueil
+    if (!$movie) {
+        return $this->redirectToRoute('homepage');
+    }
+
+    // Appel de la fonction pour récupérer les crédits (acteurs, réalisateurs, etc.) du film
+    $credits = $this->getMovieCreditsFromApi($id);
+
+    // Appel de la fonction pour récupérer les films similaires à celui demandé
+    $similarMovies = $this->getSimilarMoviesFromApi($id);
+
+    // Rendu du template 'movie/detail.html.twig' avec les données du film, les crédits et les films similaires
+    // Ces données sont passées au template Twig sous forme de variables
+    return $this->render('movie/detail.html.twig', [
+        'movie' => $movie,  // Les données du film
+        'credits' => $credits,  // Les crédits (acteurs, réalisateurs, etc.)
+        'similarMovies' => $similarMovies,  // Les films similaires
+    ]);
+}
+
+// Fonction pour récupérer les films similaires depuis l'API
+private function getSimilarMoviesFromApi(int $id)
+{
+    // Définition de la clé API pour interroger l'API de TMDB
+    $apiKey = 'c3fa1c43c0dc02bc905e415968a469ef';
+    
+    // Construction de l'URL pour récupérer les films similaires, incluant l'ID du film
+    $url = "https://api.themoviedb.org/3/movie/{$id}/similar?api_key={$apiKey}&language=fr-FR";
+
+    try {
+        // Envoi de la requête GET à l'API pour obtenir les films similaires
+        $response = $this->httpClient->request('GET', $url);
+        
+        // Conversion de la réponse en tableau associatif
+        $similarMovies = $response->toArray();
+
+        // Vérification si des films similaires existent dans la réponse
+        if (empty($similarMovies['results'])) {
+            // Si aucun film similaire n'est trouvé, lancer une exception
+            throw new \Exception('Films similaires non trouvés.');
+        }
+
+        // Retourner la liste des films similaires récupérés
+        return $similarMovies['results'];
+
+    } catch (\Exception $e) {
+        // En cas d'erreur (par exemple, problème avec l'API), afficher un message d'erreur
+        $this->addFlash('error', 'Erreur lors de la récupération des films similaires : ' . $e->getMessage());
+        
+        // Retourner un tableau vide si une erreur se produit
+        return [];  // Retourne un tableau vide en cas d'erreur
+    }
+}
+
+// Récupérer les données du film depuis l'API en utilisant l'ID
+private function getMovieDataFromApi(int $id)
+{
+    // Définition de la clé API pour interroger l'API de TMDB
+    $apiKey = 'c3fa1c43c0dc02bc905e415968a469ef';
+    
+    // Construction de l'URL pour récupérer les informations du film par son ID
+    $url = "https://api.themoviedb.org/3/movie/{$id}?api_key={$apiKey}&language=fr-FR";
+
+    try {
+        // Envoi de la requête GET à l'API pour obtenir les données du film
+        $response = $this->httpClient->request('GET', $url);
+        
+        // Conversion de la réponse en tableau associatif
+        $movie = $response->toArray();
+
+        // Vérification si les données du film sont présentes
+        if (empty($movie)) {
+            // Si aucune donnée de film n'est trouvée, lancer une exception
+            throw new \Exception('Film non trouvé.');
+        }
+
+        // Retourner les données du film récupérées
+        return $movie;
+
+    } catch (\Exception $e) {
+        // En cas d'erreur (par exemple, problème avec l'API), afficher un message d'erreur
+        $this->addFlash('error', 'Erreur lors de la récupération du film : ' . $e->getMessage());
+        
+        // Retourner null si une erreur se produit
+        return null;
+    }
+}
+
+// Récupérer les crédits (acteurs, réalisateurs, etc.) du film depuis l'API en utilisant l'ID
+private function getMovieCreditsFromApi(int $id)
+{
+    // Définition de la clé API pour interroger l'API de TMDB
+    $apiKey = 'c3fa1c43c0dc02bc905e415968a469ef';
+    
+    // Construction de l'URL pour récupérer les crédits du film par son ID
+    $url = "https://api.themoviedb.org/3/movie/{$id}/credits?api_key={$apiKey}&language=fr-FR";
+
+    try {
+        // Envoi de la requête GET à l'API pour obtenir les crédits du film
+        $response = $this->httpClient->request('GET', $url);
+        
+        // Conversion de la réponse en tableau associatif
+        $credits = $response->toArray();
+
+        // Vérification si des crédits sont présents dans la réponse
+        if (empty($credits)) {
+            // Si aucun crédit n'est trouvé, lancer une exception
+            throw new \Exception('Crédits non trouvés.');
+        }
+
+        // Retourner les crédits récupérés
+        return $credits;
+
+    } catch (\Exception $e) {
+        // En cas d'erreur (par exemple, problème avec l'API), afficher un message d'erreur
+        $this->addFlash('error', 'Erreur lors de la récupération des crédits : ' . $e->getMessage());
+        
+        // Retourner null si une erreur se produit
+        return null;
+    }
+}
+
+
+
 }

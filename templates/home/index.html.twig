@@ -329,7 +329,10 @@ body, html {
                     <li class="carousel__item" tabindex="0" {% if loop.first %} data-active="true" {% endif %}>
                         <div class="carousel__box">
                             <div class="carousel__image">
-                                <img src="{{ movie.poster_path }}" alt="{{ movie.title }}" />
+                                
+                                <a href="{{ path('movie_detail', { 'id': movie.id }) }}">
+                                    <img src="{{ movie.poster_path }}" alt="{{ movie.title }}" class="movie-poster" data-id="{{ movie.id }}" />
+                                </a>
                             </div>
                             <div class="carousel__contents">
                                 <h2 class="user__name">{{ movie.title }}</h2>
@@ -502,6 +505,25 @@ const activateSlide = ($slide) => {
     // Mettre à jour les tailles des slides après l'activation
     updateSizes();
 };
+
+
+
+
+
+// Ajouter un écouteur d'événement pour chaque image
+document.querySelectorAll('.movie-poster').forEach(function(image) {
+    image.addEventListener('dblclick', function(event) {
+        // Récupérer l'ID du film depuis l'attribut "data-id" de l'image
+        var movieId = event.target.getAttribute('data-id');
+        
+        // Créer l'URL de la page de détail du film avec l'ID récupéré
+        var url = '/movies/' + movieId; // Générer l'URL directement
+
+        // Rediriger vers la page de détail
+        window.location.href = url;
+    });
+});
+
 </script>
 
 {% endblock %}
