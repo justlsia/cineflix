@@ -56,8 +56,8 @@
                             <a class="nav-link disabled" aria-disabled="true">Disabled</a>
                         </li>
                     </ul>
-                    <form class="d-flex" role="search">
-                        <input class="form-control me-2" type="search" placeholder="Search a movie" aria-label="Search">
+                    <form class="d-flex" role="search" method="GET" action="{{ path('movie_search') }}">
+                        <input name="title" class="form-control me-2" type="search" placeholder="Search a movie" aria-label="Search">
                         <button class="btn btn-dark" type="submit">Search</button>
                     </form>
                 </div>

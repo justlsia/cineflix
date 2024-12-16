@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Films{% endblock %}
+
+{% block stylesheets %}
+
+{% endblock %}
+
+
+
+
+{% block body %}
+
+<div class="container">
+    <h1>Résultats de recherche pour "{{ search }}"</h1>
+
+    {% if movies is empty %}
+        <p>Aucun film trouvé pour votre recherche.</p>
+    {% else %}
+        <div class="row">
+            {% for movie in movies %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        {% if movie.poster_path %}
+                            <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" class="card-img-top" alt="{{ movie.title }}">
+                        {% else %}
+                            <img src="https://via.placeholder.com/500x750?text=No+Image" class="card-img-top" alt="{{ movie.title }}">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ movie.title }}</h5>
+                            <p class="card-text">
+                                {{ movie.overview|length > 100 ? movie.overview|slice(0, 100) ~ '...' : movie.overview }}
+                            </p>
+                            <p><strong>Date de sortie :</strong> {{ movie.release_date }}</p>
+                            <a href="{{ path('movie_details', { id: movie.id }) }}" class="btn btn-dark">Voir les détails</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}
+
+
+
+
+{% block javascripts %}
+
+{% endblock %}

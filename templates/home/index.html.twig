@@ -311,6 +311,48 @@ body, html {
 .carousel__item {
   flex-basis: var(--inactive-size, calc(var(--width) / 2)); /* Taille par défaut */
 }
+
+
+.carousel__nav {
+  position: absolute; /* Positionner les flèches de manière absolue */
+  top: 50%; /* Centrer les flèches verticalement */
+  transform: translateY(-50%); /* Centrer parfaitement les flèches */
+  width: 100%; /* Prendre toute la largeur du carrousel */
+  display: flex; /* Flexbox pour aligner les flèches */
+  justify-content: space-between; /* Espacer les flèches */
+}
+
+/* Style commun pour les boutons */
+.carousel__nav button {
+    background-color: black; /* Fond noir */
+    color: white; /* Flèche blanche */
+    border: 2px solid black; /* Bordure noire */
+    padding: 10px; /* Espacement autour de la flèche */
+    font-size: 24px; /* Taille de la flèche */
+    font-family: Arial, sans-serif; /* Police */
+    text-align: center; /* Centrer la flèche */
+    display: inline-flex; /* Pour centrer la flèche à l'intérieur */
+    justify-content: center;
+    align-items: center;
+    width: 50px; /* Largeur du bouton */
+    height: 50px; /* Hauteur du bouton */
+    border-radius: 50
+}
+
+/* Flèche gauche */
+.prev {
+  position: absolute;
+  left: 10px; /* Décalage à gauche */
+}
+
+/* Flèche droite */
+.next {
+  position: absolute;
+  right: 10px; /* Décalage à droite */
+}
+
+
+
 </style>
 
 {% endblock %}
@@ -345,8 +387,10 @@ body, html {
 
             <!-- Navigation pour faire défiler les films -->
             <div class="carousel__nav">
-                <button class="prev">Précédent</button>
-                <button class="next">Suivant</button>
+                <!--<button class="prev">Précédent</button>
+                <button class="next">Suivant</button>-->
+                <button class="prev" aria-label="Précédent">&#8592;</button> <!-- Flèche gauche -->
+                <button class="next" aria-label="Suivant">&#8594;</button> <!-- Flèche droite -->
             </div>
         </section>
         <!-- Fin partie : Films tendances -->

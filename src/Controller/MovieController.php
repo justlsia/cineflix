@@ -6,10 +6,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Component\HttpFoundation\Request;
+
 
 class MovieController extends AbstractController
 {
     private HttpClientInterface $httpClient;
+    private $apiKey = 'c3fa1c43c0dc02bc905e415968a469ef';
 
     // Constructeur
     public function __construct(HttpClientInterface $httpClient)
@@ -33,7 +36,7 @@ class MovieController extends AbstractController
         ];
 
         // Clé API TMDB 
-        $apiKey = 'c3fa1c43c0dc02bc905e415968a469ef'; // Clé api TMDB
+        $apiKey = $this->apiKey; 
 
         // Variables pour stocker les films par genre
         $actionMovies = [];
@@ -144,8 +147,7 @@ public function show(int $id): Response
 // Fonction pour récupérer les films similaires depuis l'API
 private function getSimilarMoviesFromApi(int $id)
 {
-    // Définition de la clé API pour interroger l'API de TMDB
-    $apiKey = 'c3fa1c43c0dc02bc905e415968a469ef';
+    $apiKey = $this->apiKey;
     
     // Construction de l'URL pour récupérer les films similaires, incluant l'ID du film
     $url = "https://api.themoviedb.org/3/movie/{$id}/similar?api_key={$apiKey}&language=fr-FR";
@@ -178,8 +180,7 @@ private function getSimilarMoviesFromApi(int $id)
 // Récupérer les données du film depuis l'API en utilisant l'ID
 private function getMovieDataFromApi(int $id)
 {
-    // Définition de la clé API pour interroger l'API de TMDB
-    $apiKey = 'c3fa1c43c0dc02bc905e415968a469ef';
+    $apiKey = $this->apiKey;
     
     // Construction de l'URL pour récupérer les informations du film par son ID
     $url = "https://api.themoviedb.org/3/movie/{$id}?api_key={$apiKey}&language=fr-FR";
@@ -212,8 +213,7 @@ private function getMovieDataFromApi(int $id)
 // Récupérer les crédits (acteurs, réalisateurs, etc.) du film depuis l'API en utilisant l'ID
 private function getMovieCreditsFromApi(int $id)
 {
-    // Définition de la clé API pour interroger l'API de TMDB
-    $apiKey = 'c3fa1c43c0dc02bc905e415968a469ef';
+    $apiKey = $this->apiKey;
     
     // Construction de l'URL pour récupérer les crédits du film par son ID
     $url = "https://api.themoviedb.org/3/movie/{$id}/credits?api_key={$apiKey}&language=fr-FR";
@@ -240,6 +240,51 @@ private function getMovieCreditsFromApi(int $id)
         
         // Retourner null si une erreur se produit
         return null;
+    }
+}
+
+// EN COURS
+#[Route('/movie/search', name: 'movie_search')]
+public function searchMovie(Request $request): Response
+{
+    $apiKey = $this->apiKey;
+
+    // Récupérer le titre depuis la requête GET (champ "search" du formulaire)
+    $title = $request->query->get('search');
+    dump($title); 
+    // Vérifier si le champ "search" est vide
+    if (!$title) {
+        $this->addFlash('error', 'Veuillez entrer un titre pour effectuer une recherche.');
+        return $this->redirectToRoute('app_home'); // Redirection vers une autre page si nécessaire
+    }
+
+    // Construire l'URL pour récupérer un film selon son titre
+    $url = "https://api.themoviedb.org/3/search/movie?api_key={$apiKey}&query={$title}&language=fr-FR";
+
+    try {
+        // Envoi de la requête GET à l'API pour obtenir les films
+        $response = $this->httpClient->request('GET', $url);
+
+        // Conversion de la réponse en tableau associatif
+        $movies = $response->toArray()['results'] ?? [];
+
+        // Si aucun film n'est trouvé
+        if (empty($movies)) {
+            $this->addFlash('warning', 'Aucun film trouvé pour votre recherche.');
+            return $this->redirectToRoute('movie_search');
+        }
+
+        // Passer les résultats à une vue
+        return $this->render('movie/search.html.twig', [
+            'movies' => $movies,
+            'search' => $title,
+        ]);
+
+    } catch (\Exception $e) {
+        // En cas d'erreur, ajouter un flash message
+        $this->addFlash('error', 'Erreur lors de la récupération des films : ' . $e->getMessage());
+
+        return $this->redirectToRoute('app_home');
     }
 }
 

@@ -333,9 +333,12 @@ body, html {
                 {% for movie in actionMovies %}
                     <li class="carousel__item" tabindex="0" {% if loop.first %} data-active="true" {% endif %}>
                         <div class="carousel__box">
-                            <div class="carousel__image">
-                                <img src="{{ movie.poster_path }}" alt="{{ movie.title }}" />
+                            <div class="carousel__image">                               
+                                <a href="{{ path('movie_detail', { 'id': movie.id }) }}">
+                                    <img src="{{ movie.poster_path }}" alt="{{ movie.title }}" class="movie-poster" data-id="{{ movie.id }}" />
+                                </a>
                             </div>
+
                             <div class="carousel__contents">
                                 <h2 class="user__name">{{ movie.title }}</h2>
                                 <h3 class="user__title">Popularité : {{ movie.popularity }}</h3>
