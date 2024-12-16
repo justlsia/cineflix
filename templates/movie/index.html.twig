@@ -306,10 +306,51 @@ body, html {
 /* Cacher le reste des films, uniquement les 6 visibles */
 .carousel__list {
   width: calc(2 * 100%); /* Afficher les 6 films dans la fenêtre */
+
 }
 
 .carousel__item {
   flex-basis: var(--inactive-size, calc(var(--width) / 3)); /* Taille par défaut */
+
+}
+
+
+.carousel__nav {
+  position: absolute; /* Positionner les flèches de manière absolue */
+  top: 50%; /* Centrer les flèches verticalement */
+  transform: translateY(-50%); /* Centrer parfaitement les flèches */
+  width: 100%; /* Prendre toute la largeur du carrousel */
+  display: flex; /* Flexbox pour aligner les flèches */
+  justify-content: space-between; /* Espacer les flèches */
+}
+
+/* Style commun pour les boutons */
+.carousel__nav button {
+    background-color: black; /* Fond noir */
+    color: white; /* Flèche blanche */
+    border: 2px solid black; /* Bordure noire */
+    padding: 10px; /* Espacement autour de la flèche */
+    font-size: 24px; /* Taille de la flèche */
+    font-family: Arial, sans-serif; /* Police */
+    text-align: center; /* Centrer la flèche */
+    display: inline-flex; /* Pour centrer la flèche à l'intérieur */
+    justify-content: center;
+    align-items: center;
+    width: 50px; /* Largeur du bouton */
+    height: 50px; /* Hauteur du bouton */
+    border-radius: 50
+}
+
+/* Flèche gauche */
+.prev {
+  position: absolute;
+  left: 10px; /* Décalage à gauche */
+}
+
+/* Flèche droite */
+.next {
+  position: absolute;
+  right: 10px; /* Décalage à droite */
 }
 </style>
 
@@ -350,8 +391,8 @@ body, html {
 
             <!-- Navigation pour faire défiler les films -->
             <div class="carousel__nav">
-                <button class="prev">Précédent</button>
-                <button class="next">Suivant</button>
+                <button class="prev" aria-label="Précédent">&#8592;</button> <!-- Flèche gauche -->
+                <button class="next" aria-label="Suivant">&#8594;</button> <!-- Flèche droite -->
             </div>
         </section>
         <!-- Fin partie : Films action -->
@@ -366,7 +407,9 @@ body, html {
                     <li class="carousel__item" tabindex="0" {% if loop.first %} data-active="true" {% endif %}>
                         <div class="carousel__box">
                             <div class="carousel__image">
-                                <img src="{{ movie.poster_path }}" alt="{{ movie.title }}" />
+                                <a href="{{ path('movie_detail', { 'id': movie.id }) }}">
+                                    <img src="{{ movie.poster_path }}" alt="{{ movie.title }}" class="movie-poster" data-id="{{ movie.id }}" />
+                                </a>
                             </div>
                             <div class="carousel__contents">
                                 <h2 class="user__name">{{ movie.title }}</h2>
@@ -379,8 +422,8 @@ body, html {
 
             <!-- Navigation pour faire défiler les films -->
             <div class="carousel__nav">
-                <button class="prev">Précédent</button>
-                <button class="next">Suivant</button>
+                <button class="prev" aria-label="Précédent">&#8592;</button> <!-- Flèche gauche -->
+                <button class="next" aria-label="Suivant">&#8594;</button> <!-- Flèche droite -->
             </div>
         </section>
         <!-- Fin partie : Films Aventure -->
@@ -395,7 +438,9 @@ body, html {
                     <li class="carousel__item" tabindex="0" {% if loop.first %} data-active="true" {% endif %}>
                         <div class="carousel__box">
                             <div class="carousel__image">
-                                <img src="{{ movie.poster_path }}" alt="{{ movie.title }}" />
+                                <a href="{{ path('movie_detail', { 'id': movie.id }) }}">
+                                    <img src="{{ movie.poster_path }}" alt="{{ movie.title }}" class="movie-poster" data-id="{{ movie.id }}" />
+                                </a>
                             </div>
                             <div class="carousel__contents">
                                 <h2 class="user__name">{{ movie.title }}</h2>
@@ -408,8 +453,8 @@ body, html {
 
             <!-- Navigation pour faire défiler les films -->
             <div class="carousel__nav">
-                <button class="prev">Précédent</button>
-                <button class="next">Suivant</button>
+                <button class="prev" aria-label="Précédent">&#8592;</button> <!-- Flèche gauche -->
+                <button class="next" aria-label="Suivant">&#8594;</button> <!-- Flèche droite -->
             </div>
         </section>
         <!-- Fin partie : Films Animation -->
@@ -425,7 +470,9 @@ body, html {
                     <li class="carousel__item" tabindex="0" {% if loop.first %} data-active="true" {% endif %}>
                         <div class="carousel__box">
                             <div class="carousel__image">
-                                <img src="{{ movie.poster_path }}" alt="{{ movie.title }}" />
+                                <a href="{{ path('movie_detail', { 'id': movie.id }) }}">
+                                    <img src="{{ movie.poster_path }}" alt="{{ movie.title }}" class="movie-poster" data-id="{{ movie.id }}" />
+                                </a>
                             </div>
                             <div class="carousel__contents">
                                 <h2 class="user__name">{{ movie.title }}</h2>
@@ -438,8 +485,8 @@ body, html {
 
             <!-- Navigation pour faire défiler les films -->
             <div class="carousel__nav">
-                <button class="prev">Précédent</button>
-                <button class="next">Suivant</button>
+                <button class="prev" aria-label="Précédent">&#8592;</button> <!-- Flèche gauche -->
+                <button class="next" aria-label="Suivant">&#8594;</button> <!-- Flèche droite -->
             </div>
         </section>
         <!-- Fin partie : Films Comédie -->
@@ -456,7 +503,9 @@ body, html {
                     <li class="carousel__item" tabindex="0" {% if loop.first %} data-active="true" {% endif %}>
                         <div class="carousel__box">
                             <div class="carousel__image">
-                                <img src="{{ movie.poster_path }}" alt="{{ movie.title }}" />
+                                <a href="{{ path('movie_detail', { 'id': movie.id }) }}">
+                                    <img src="{{ movie.poster_path }}" alt="{{ movie.title }}" class="movie-poster" data-id="{{ movie.id }}" />
+                                </a>
                             </div>
                             <div class="carousel__contents">
                                 <h2 class="user__name">{{ movie.title }}</h2>
@@ -469,8 +518,8 @@ body, html {
 
             <!-- Navigation pour faire défiler les films -->
             <div class="carousel__nav">
-                <button class="prev">Précédent</button>
-                <button class="next">Suivant</button>
+                <button class="prev" aria-label="Précédent">&#8592;</button> <!-- Flèche gauche -->
+                <button class="next" aria-label="Suivant">&#8594;</button> <!-- Flèche droite -->
             </div>
         </section>
         <!-- Fin partie : Films Horreur -->
@@ -486,7 +535,9 @@ body, html {
                     <li class="carousel__item" tabindex="0" {% if loop.first %} data-active="true" {% endif %}>
                         <div class="carousel__box">
                             <div class="carousel__image">
-                                <img src="{{ movie.poster_path }}" alt="{{ movie.title }}" />
+                                <a href="{{ path('movie_detail', { 'id': movie.id }) }}">
+                                    <img src="{{ movie.poster_path }}" alt="{{ movie.title }}" class="movie-poster" data-id="{{ movie.id }}" />
+                                </a>
                             </div>
                             <div class="carousel__contents">
                                 <h2 class="user__name">{{ movie.title }}</h2>
@@ -499,8 +550,8 @@ body, html {
 
             <!-- Navigation pour faire défiler les films -->
             <div class="carousel__nav">
-                <button class="prev">Précédent</button>
-                <button class="next">Suivant</button>
+                <button class="prev" aria-label="Précédent">&#8592;</button> <!-- Flèche gauche -->
+                <button class="next" aria-label="Suivant">&#8594;</button> <!-- Flèche droite -->
             </div>
         </section>
         <!-- Fin partie : Films Documentaire -->
@@ -517,7 +568,9 @@ body, html {
                     <li class="carousel__item" tabindex="0" {% if loop.first %} data-active="true" {% endif %}>
                         <div class="carousel__box">
                             <div class="carousel__image">
-                                <img src="{{ movie.poster_path }}" alt="{{ movie.title }}" />
+                                <a href="{{ path('movie_detail', { 'id': movie.id }) }}">
+                                    <img src="{{ movie.poster_path }}" alt="{{ movie.title }}" class="movie-poster" data-id="{{ movie.id }}" />
+                                </a>
                             </div>
                             <div class="carousel__contents">
                                 <h2 class="user__name">{{ movie.title }}</h2>
@@ -530,8 +583,8 @@ body, html {
 
             <!-- Navigation pour faire défiler les films -->
             <div class="carousel__nav">
-                <button class="prev">Précédent</button>
-                <button class="next">Suivant</button>
+                <button class="prev" aria-label="Précédent">&#8592;</button> <!-- Flèche gauche -->
+                <button class="next" aria-label="Suivant">&#8594;</button> <!-- Flèche droite -->
             </div>
         </section>
         <!-- Fin partie : Films Drama -->
@@ -546,8 +599,6 @@ body, html {
 
 
 
-
-
 {% block javascripts %}
 
 <script>
@@ -555,148 +606,141 @@ document.addEventListener("DOMContentLoaded", function() {
     const d = document;
     const $q = d.querySelectorAll.bind(d); // Fonction pour sélectionner tous les éléments correspondants
     const $g = d.querySelector.bind(d); // Fonction pour sélectionner un seul élément
-    const $prev = $g(".prev"); // Sélectionner le bouton précédent
-    const $next = $g(".next"); // Sélectionner le bouton suivant
-    const $list = $g(".carousel__list"); // Sélectionner la liste de carrousel
+    
+    // Fonction pour initialiser chaque carrousel
+    const initCarousel = (carousel) => {
+        const $prev = carousel.querySelector(".prev"); // Sélectionner le bouton précédent
+        const $next = carousel.querySelector(".next"); // Sélectionner le bouton suivant
+        const $list = carousel.querySelector(".carousel__list"); // Sélectionner la liste de carrousel
 
-    // Vérifier si les éléments nécessaires sont présents dans le DOM
-    if (!$prev || !$next || !$list) {
-        console.error("Erreur : Les éléments nécessaires ne sont pas présents dans le DOM.");
-        return; // Arrêter le script si les éléments nécessaires n'existent pas
-    }
-
-    let auto; // Variable pour le setInterval (auto-slide)
-    let pauser; // Variable pour le setTimeout (pause avant la reprise automatique)
-
-    // Fonction pour obtenir l'index de l'élément actif
-    const getActiveIndex = () => {
-        const $active = $g("[data-active]"); // Sélectionner l'élément actif
-        return getSlideIndex($active); // Retourner son index
-    };
-
-    // Fonction pour obtenir l'index d'un slide spécifique
-    const getSlideIndex = ($slide) => {
-        return [...$q(".carousel__item")].indexOf($slide); // Retourner l'index du slide
-    };
-
-    // Fonction pour afficher le slide précédent
-    const prevSlide = () => {
-        const index = getActiveIndex(); // Récupérer l'index de l'élément actif
-        const $slides = $q(".carousel__item"); // Récupérer tous les slides
-        const $last = $slides[$slides.length - 1]; // Dernier slide
-        $last.remove(); // Supprimer le dernier slide
-        $list.prepend($last); // Ajouter ce slide au début de la liste
-        activateSlide($q(".carousel__item")[index]); // Activer le slide à l'index d'origine
-    };
-
-    // Fonction pour afficher le slide suivant
-    const nextSlide = () => {
-        const index = getActiveIndex(); // Récupérer l'index de l'élément actif
-        const $slides = $q(".carousel__item"); // Récupérer tous les slides
-        const $first = $slides[0]; // Premier slide
-        $first.remove(); // Supprimer le premier slide
-        $list.append($first); // Ajouter ce slide à la fin de la liste
-        activateSlide($q(".carousel__item")[index]); // Activer le slide à l'index d'origine
-    };
-
-    // Fonction pour choisir un slide au clic
-    const chooseSlide = (e) => {
-        const $slide = e.target.closest(".carousel__item"); // Sélectionner l'élément le plus proche qui est un slide
-        if (!$slide) return; // Si aucun slide n'est trouvé, sortir
-        const index = getSlideIndex($slide); // Obtenir l'index du slide
-        activateSlide($slide); // Activer le slide cliqué
-    };
-
-    // Fonction pour activer un slide
-    const activateSlide = ($slide) => {
-        if (!$slide) return; // Si aucun slide n'est passé, sortir
-        const $slides = $q(".carousel__item"); // Récupérer tous les slides
-        $slides.forEach((el) => el.removeAttribute("data-active")); // Désactiver tous les slides
-        $slide.setAttribute("data-active", true); // Activer le slide passé en paramètre
-        $slide.focus(); // Mettre le focus sur le slide actif
-    };
-
-    // Fonction pour faire défiler automatiquement les slides
-    const autoSlide = () => {
-        nextSlide(); // Passer au slide suivant
-    };
-
-    // Fonction pour arrêter le défilement automatique
-    const pauseAuto = () => {
-        clearInterval(auto); // Arrêter l'intervalle du slide automatique
-        clearTimeout(pauser); // Arrêter le timeout de pause automatique
-    };
-
-    // Gestionnaire de clic sur le bouton "Suivant"
-    const handleNextClick = (e) => {
-        pauseAuto(); // Arrêter l'auto-défilement
-        nextSlide(e); // Passer au slide suivant
-    };
-
-    // Gestionnaire de clic sur le bouton "Précédent"
-    const handlePrevClick = (e) => {
-        pauseAuto(); // Arrêter l'auto-défilement
-        prevSlide(e); // Passer au slide précédent
-    };
-
-    // Gestionnaire de clic sur un slide pour le choisir
-    const handleSlideClick = (e) => {
-        pauseAuto(); // Arrêter l'auto-défilement
-        chooseSlide(e); // Choisir le slide cliqué
-    };
-
-    // Gestionnaire d'événements pour les touches directionnelles et les touches A/D
-    const handleSlideKey = (e) => {
-        switch (e.keyCode) {
-            case 37: // Flèche gauche
-            case 65: // Touche "A"
-                handlePrevClick(); // Passer au slide précédent
-                break;
-            case 39: // Flèche droite
-            case 68: // Touche "D"
-                handleNextClick(); // Passer au slide suivant
-                break;
+        // Vérifier si les éléments nécessaires sont présents dans le DOM
+        if (!$prev || !$next || !$list) {
+            console.error("Erreur : Les éléments nécessaires ne sont pas présents dans le DOM.");
+            return; // Arrêter le script si les éléments nécessaires n'existent pas
         }
+
+        // Fonction pour obtenir l'index de l'élément actif
+        const getActiveIndex = () => {
+            const $active = carousel.querySelector("[data-active]"); // Sélectionner l'élément actif
+            return getSlideIndex($active); // Retourner son index
+        };
+
+        // Fonction pour obtenir l'index d'un slide spécifique
+        const getSlideIndex = ($slide) => {
+            return [...carousel.querySelectorAll(".carousel__item")].indexOf($slide); // Retourner l'index du slide
+        };
+
+        // Fonction pour afficher le slide précédent
+        const prevSlide = () => {
+            const index = getActiveIndex(); // Récupérer l'index de l'élément actif
+            const $slides = carousel.querySelectorAll(".carousel__item"); // Récupérer tous les slides
+            const $last = $slides[$slides.length - 1]; // Dernier slide
+            $last.remove(); // Supprimer le dernier slide
+            $list.prepend($last); // Ajouter ce slide au début de la liste
+            activateSlide($q(".carousel__item")[index]); // Activer le slide à l'index d'origine
+        };
+
+        // Fonction pour afficher le slide suivant
+        const nextSlide = () => {
+            const index = getActiveIndex(); // Récupérer l'index de l'élément actif
+            const $slides = carousel.querySelectorAll(".carousel__item"); // Récupérer tous les slides
+            const $first = $slides[0]; // Premier slide
+            $first.remove(); // Supprimer le premier slide
+            $list.append($first); // Ajouter ce slide à la fin de la liste
+            activateSlide($q(".carousel__item")[index]); // Activer le slide à l'index d'origine
+        };
+
+        // Fonction pour choisir un slide au clic
+        const chooseSlide = (e) => {
+            const $slide = e.target.closest(".carousel__item"); // Sélectionner l'élément le plus proche qui est un slide
+            if (!$slide) return; // Si aucun slide n'est trouvé, sortir
+            const index = getSlideIndex($slide); // Obtenir l'index du slide
+            activateSlide($slide); // Activer le slide cliqué
+        };
+
+        // Fonction pour activer un slide
+        const activateSlide = ($slide) => {
+            if (!$slide) return; // Si aucun slide n'est passé, sortir
+            const $slides = carousel.querySelectorAll(".carousel__item"); // Récupérer tous les slides
+            $slides.forEach((el) => el.removeAttribute("data-active")); // Désactiver tous les slides
+            $slide.setAttribute("data-active", true); // Activer le slide passé en paramètre
+            //$slide.focus(); // Mettre le focus sur le slide actif
+        };
+
+        // Fonction pour faire défiler automatiquement les slides
+        const autoSlide = () => {
+            nextSlide(); // Passer au slide suivant
+        };
+
+        // Fonction pour arrêter le défilement automatique
+        const pauseAuto = () => {
+            clearInterval(auto); // Arrêter l'intervalle du slide automatique
+        };
+
+        // Gestionnaire de clic sur le bouton "Suivant"
+        const handleNextClick = (e) => {
+            pauseAuto(); // Arrêter l'auto-défilement
+            nextSlide(e); // Passer au slide suivant
+        };
+
+        // Gestionnaire de clic sur le bouton "Précédent"
+        const handlePrevClick = (e) => {
+            pauseAuto(); // Arrêter l'auto-défilement
+            prevSlide(e); // Passer au slide précédent
+        };
+
+        // Gestionnaire de clic sur un slide pour le choisir
+        const handleSlideClick = (e) => {
+            pauseAuto(); // Arrêter l'auto-défilement
+            chooseSlide(e); // Choisir le slide cliqué
+        };
+
+        // Gestionnaire d'événements pour les touches directionnelles et les touches A/D
+        const handleSlideKey = (e) => {
+            switch (e.keyCode) {
+                case 37: // Flèche gauche
+                case 65: // Touche "A"
+                    handlePrevClick(); // Passer au slide précédent
+                    break;
+                case 39: // Flèche droite
+                case 68: // Touche "D"
+                    handleNextClick(); // Passer au slide suivant
+                    break;
+            }
+        };
+
+        // Démarrer l'auto-défilement des slides
+        const startAuto = () => {
+            auto = setInterval(autoSlide, 10000); // Faire défiler toutes les 10 secondes
+        };
+
+        startAuto(); // Démarrer l'auto-défilement
+
+        // Assurez-vous que les éléments existent avant d'ajouter des écouteurs
+        $next.addEventListener("click", handleNextClick); // Ajouter un événement de clic sur le bouton suivant
+        $prev.addEventListener("click", handlePrevClick); // Ajouter un événement de clic sur le bouton précédent
+        $list.addEventListener("click", handleSlideClick); // Ajouter un événement de clic sur les slides
+        $list.addEventListener("keyup", handleSlideKey); // Ajouter un événement de touche sur les slides
     };
 
-    // Démarrer l'auto-défilement des slides
-    const startAuto = () => {
-        auto = setInterval(autoSlide, 3000); // Faire défiler toutes les 3 secondes
-    };
-
-    startAuto(); // Démarrer l'auto-défilement
-
-    // Assurez-vous que les éléments existent avant d'ajouter des écouteurs
-    $next.addEventListener("click", handleNextClick); // Ajouter un événement de clic sur le bouton suivant
-    $prev.addEventListener("click", handlePrevClick); // Ajouter un événement de clic sur le bouton précédent
-    $list.addEventListener("click", handleSlideClick); // Ajouter un événement de clic sur les slides
-    $list.addEventListener("keyup", handleSlideKey); // Ajouter un événement de touche sur les slides
+    // Initialiser chaque carrousel de manière indépendante
+    const carousels = document.querySelectorAll('.carousel');
+    carousels.forEach((carousel) => {
+        initCarousel(carousel);
+    });
 });
 
 
-// Fonction pour mettre à jour la taille des slides
-const updateSizes = () => {
-    const root = document.documentElement;
-    const activeSize = getComputedStyle(root).getPropertyValue('--active-size').trim(); // Récupérer la taille active
-    const inactiveSize = getComputedStyle(root).getPropertyValue('--inactive-size').trim(); // Récupérer la taille inactive
-    
-    // Échanger les tailles active et inactive
-    root.style.setProperty('--active-size', inactiveSize);
-    root.style.setProperty('--inactive-size', activeSize);
+// Fonction pour gérer le survol des slides
+const handleSlideHover = (e) => {
+    const $slide = e.target.closest(".carousel__item"); // Sélectionner l'élément le plus proche qui est un slide
+    if (!$slide) return; // Si aucun slide n'est trouvé, sortir
+    activateSlide($slide); // Réactiver le slide sous la souris
 };
 
-// Fonction pour activer un slide et mettre à jour la taille
-const activateSlide = ($slide) => {
-    if (!$slide) return; // Si aucun slide n'est passé, sortir
-    const $slides = document.querySelectorAll(".carousel__item"); // Récupérer tous les slides
-    $slides.forEach((el) => el.removeAttribute("data-active")); // Désactiver tous les slides
-    $slide.setAttribute("data-active", true); // Activer le slide passé en paramètre
-    $slide.focus(); // Mettre le focus sur le slide actif
-    
-    // Mettre à jour les tailles des slides après l'activation
-    updateSizes();
+$list.addEventListener("mouseover", handleSlideHover); // Ajouter l'événement de survol sur les slides
 
-};
+
 </script>
 
 {% endblock %}
