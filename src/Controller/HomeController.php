@@ -85,7 +85,7 @@ class HomeController extends AbstractController
 
 
 
-
+    // Afficher la fiche détaillée d'un film
     #[Route('/movie/{id}', name: 'movie_detail')]
     public function show(int $id, MovieRepository $movieRepository): Response
     {

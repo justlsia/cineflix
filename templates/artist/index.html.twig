@@ -1,20 +1,51 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ArtistController!{% endblock %}
+{% block title %}The actors{% endblock %}
 
-{% block body %}
+{% block steelsheat %}
+
 <style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+
+
 </style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+{% endblock %}
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>/var/www/html/symfonyCine/cine-app/src/Controller/ArtistController.php</code></li>
-        <li>Your template at <code>/var/www/html/symfonyCine/cine-app/templates/artist/index.html.twig</code></li>
-    </ul>
+{% block body %}
+
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Les artistes tendances de la semaine</h2>
+    
+    <!-- Boucler sur les artistes tendances -->
+    {% if artists is empty %}
+        <div class="alert alert-warning text-center">
+            Aucun artiste tendance disponible pour le moment.
+        </div>
+    {% else %}
+        <div class="row">
+            {% for artist in artists %}
+                <div class="col-md-2 mb-5">
+                    <div class="card">
+                        <!--  -->
+                        {% if artist.profile_path %}
+                            <a href="#">
+                                <img src="{{ artist.profile_path }}" class="card-img-top" alt="{{ artist.name }}">
+                            </a>
+                        {% else %}
+                            <img src="https://via.placeholder.com/500x750?text=No+Image" class="card-img-top" alt="Pas d'image disponible">
+                        {% endif %}
+                        
+                        <div class="card-body">
+                            <!-- Nom de l'artiste -->
+                            <h5 class="card-title text-center">{{ artist.name }}</h5>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 </div>
+
+
 {% endblock %}

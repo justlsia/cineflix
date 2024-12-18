@@ -19,6 +19,14 @@ body, html {
   
 }
 
+main {
+  padding: 10px;
+}
+
+h1 {
+  text-align: center;
+}
+
 a {
   color: var(--link); /* Couleur des liens */
   text-decoration: none; /* Supprimer la décoration de texte par défaut */
@@ -358,6 +366,8 @@ body, html {
 {% endblock %}
 
 {% block body %}
+
+    <h1>Tous vos films préférés référencés sur CineFlix</h1>
 
     <!-- Contenu du carrousel -->
     <main id="app">

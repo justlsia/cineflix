@@ -158,8 +158,8 @@ p {
 
         <!-- Détails du film -->
         <div class="col-md-8">
-            <h1>Titre : {{ movie.title }}</h1>
-            <h4>Date de sortie : {{ movie.release_date|date("d F Y") }}</h4>
+            <h1>{{ movie.title }}</h1>
+            <h4>{{ movie.release_date|date("d F Y") }}</h4>
             <p><strong>Genre:</strong> {{ movie.genres | map(g => g.name) | join(', ') }}</p>
             <p><strong>Synopsis:</strong> {{ movie.overview }}</p>
             <p><strong>Note:</strong> {{ movie.vote_average }} / 10</p>
