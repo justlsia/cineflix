@@ -7,7 +7,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\HttpFoundation\Request;
-
+use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Movie;
+use App\Controller\Reponse;
+use App\Form\MovieType;
 
 class MovieController extends AbstractController
 {
@@ -251,7 +254,7 @@ public function searchMovie(Request $request): Response
 
     // Récupérer le titre depuis la requête GET (champ "search" du formulaire)
     $title = $request->query->get('search');
-    dump($title); 
+    //dump($title); 
     // Vérifier si le champ "search" est vide
     if (!$title) {
         $this->addFlash('error', 'Veuillez entrer un titre pour effectuer une recherche.');
@@ -287,6 +290,66 @@ public function searchMovie(Request $request): Response
         return $this->redirectToRoute('app_home');
     }
 }
+
+
+
+#[Route('/movie/add', name: 'movie_add')]
+public function addMovie(EntityManagerInterface $entityManager, int $id): Response
+{
+
+    // Instance de l'entité Movie 
+    //$movie = new Movie();
+    // On ajoute les valeurs du films
+    //$movie->setTitle("Running Man");
+    // Préparer l'envoie
+    //$entityManager->persist($movie);
+    // Envoyé en BDD
+    //$entityManager->flush();
+
+    // 
+
+    if (!$id) {
+        return new Response("Aucun ID fourni.", Response::HTTP_BAD_REQUEST);
+    }
+
+    // Appel de la fonction pour récupérer les données d'un film à partir de l'ID passé dans l'URL
+    $movieFile = $this->getMovieDataFromApi($id);
+
+    
+    // Instance de l'entité Movie 
+    $movie = new Movie();
+
+    // On ajoute les valeurs du films
+    $movie->setTitle($movieFile['title']);
+    $movie->setIdTmdb($movieFile['id']);
+
+    // Préparer l'envoie
+    $entityManager->persist($movie);
+
+    // Envoyé en BDD
+    $entityManager->flush();
+
+    return new Response("Film ajouté dans la base.");
+}
+
+
+
+#[Route('/movie/addForm', name: 'movie_addForm')]
+public function addMovieForm(): Response
+{
+    // Créer un formulaire
+    $movieType = $this->createForm(MovieType::class);
+
+    // Générer la vue 
+    $movieTypeView= $movieType->createView();
+
+    // Rendu du temple 
+
+    return $this->render('movie/addForm.twig', [
+        'movieForm' => $movieTypeView
+    ]);
+}
+
 
 
 
