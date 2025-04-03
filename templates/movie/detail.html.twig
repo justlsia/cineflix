@@ -168,7 +168,14 @@ p {
     </div>
     
     <!-- Ajouter le film en base de données -->
-    <a href="{{ path('movie_add', { 'id': movie.id }) }}" id="addMovie" type="submit" class="btn-primary">Ajouter en base</a>
+    {% if movieForm is defined %}
+        {{ form_start(movieForm, { 'attr': { 'class': 'movie-form' } }) }}
+            {{ form_widget(movieForm) }}
+        {{ form_end(movieForm) }}
+    {% else %}
+        <p class="text-danger">Erreur : le formulaire n'est pas disponible.</p>
+    {% endif %}
+
 
     <!-- Section des acteurs -->
     <h3 class="mt-5">Acteurs principaux</h3>

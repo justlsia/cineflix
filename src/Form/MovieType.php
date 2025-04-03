@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Movie;
+use PhpParser\Node\Stmt\Label;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -13,8 +14,22 @@ class MovieType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('titleMovie')
-            ->add('idTmdb')
+            // Champs du formulaire
+
+            ->add('titleMovie', null, [
+                'label' => false,
+                'attr' => [
+                    'hidden' => 'hidden'
+                ]
+            ])
+
+            ->add('idtmdb', null, [
+                'label' => false,
+                'attr' => [
+                    'hidden' => 'hidden'
+                ]
+            ])
+
 
             // Bouton de validation du formulaire
             ->add('Save', SubmitType::class, [

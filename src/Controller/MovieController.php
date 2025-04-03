@@ -122,7 +122,7 @@ class MovieController extends AbstractController
 
 // Définition de la route qui capte un ID dans l'URL et associe cette route à la méthode 'show'
 #[Route('/movies/{id}', name: 'movie_detail')]
-public function show(int $id): Response
+public function show(int $id, Request $request, EntityManagerInterface $entityManager ): Response
 {
     // Appel de la fonction pour récupérer les données d'un film à partir de l'ID passé dans l'URL
     $movie = $this->getMovieDataFromApi($id);
@@ -138,12 +138,34 @@ public function show(int $id): Response
     // Appel de la fonction pour récupérer les films similaires à celui demandé
     $similarMovies = $this->getSimilarMoviesFromApi($id);
 
+    // Ajout des données en formulaire TEMP
+    // Instance de l'entité Movie 
+    $movieInfo = new Movie();
+    // On ajoute les valeurs du films
+    $movieInfo->setTitleMovie($movie['title']);
+    $movieInfo->setIdTmdb($movie['id']);
+
+    //dd($movieInfo);
+    // Créer un formulaire
+    $movieType = $this->createForm(MovieType::class, $movieInfo);
+    // 
+    $movieType->handleRequest($request);
+    // Préparer l'envoie
+    $entityManager->persist($movieInfo);
+    // Envoyé en BDD
+    $entityManager->flush();
+
+    // Générer la vue 
+    $movieTypeView= $movieType->createView();
+
+
     // Rendu du template 'movie/detail.html.twig' avec les données du film, les crédits et les films similaires
     // Ces données sont passées au template Twig sous forme de variables
     return $this->render('movie/detail.html.twig', [
         'movie' => $movie,  // Les données du film
         'credits' => $credits,  // Les crédits (acteurs, réalisateurs, etc.)
         'similarMovies' => $similarMovies,  // Les films similaires
+        'movieForm' => $movieTypeView, // Formulaire d'ajout en base de données
     ]);
 }
 
@@ -306,15 +328,13 @@ public function addMovie(EntityManagerInterface $entityManager, int $id): Respon
     // Envoyé en BDD
     //$entityManager->flush();
 
-    // 
-
+    // Vérifier la présence de l'id du film
     if (!$id) {
         return new Response("Aucun ID fourni.", Response::HTTP_BAD_REQUEST);
     }
 
     // Appel de la fonction pour récupérer les données d'un film à partir de l'ID passé dans l'URL
     $movieFile = $this->getMovieDataFromApi($id);
-
     
     // Instance de l'entité Movie 
     $movie = new Movie();
@@ -334,16 +354,30 @@ public function addMovie(EntityManagerInterface $entityManager, int $id): Respon
 
 
 
-#[Route('/movie/addForm', name: 'movie_addForm')]
-public function addMovieForm(): Response
+#[Route('/movie/addForm/{id}', name: 'movie_addForm')]
+public function addMovieForm(int $id): Response
 {
+
+    // Instance de l'entité Movie 
+    $movie = new Movie();
+    // Appel de la fonction pour récupérer les données d'un film à partir de l'ID passé dans l'URL
+    $movieInfo = $this->getMovieDataFromApi($id);
+
+    if (!$movieInfo || !isset($movieInfo['title'], $movieInfo['id'])) {
+        throw $this->createNotFoundException('Film introuvable.');
+    }
+
+    // On ajoute les valeurs du films
+    $movie->setTitle($movieInfo['title']);
+    $movie->setIdTmdb($movieInfo['id']);
+
     // Créer un formulaire
-    $movieType = $this->createForm(MovieType::class);
+    $movieType = $this->createForm(MovieType::class, $movie);
 
     // Générer la vue 
     $movieTypeView= $movieType->createView();
 
-    // Rendu du temple 
+    // Rendu du template 
 
     return $this->render('movie/addForm.twig', [
         'movieForm' => $movieTypeView
