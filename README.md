@@ -62,7 +62,7 @@ symfony server:start
 
 ---
 
-## 🚀 Captures d'écran
+## Captures d'écran
 
 - Accueil
 
